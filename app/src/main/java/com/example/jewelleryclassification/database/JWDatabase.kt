@@ -1,4 +1,4 @@
-package com.example.jewelryclassification.database
+package com.example.jewelleryclassification.database
 
 import android.content.Context
 import androidx.room.Database

@@ -1,4 +1,4 @@
-package com.example.jewelryclassification
+package com.example.jewelleryclassification
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4

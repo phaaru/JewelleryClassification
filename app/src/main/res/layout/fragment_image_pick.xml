@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="imagePickViewModel" type="com.example.jewelryclassification.imagepicker.ImagePickViewModel"/>
+        <variable name="imagePickViewModel" type="com.example.jewelleryclassification.imagepicker.ImagePickViewModel"/>
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout  android:layout_width="match_parent"

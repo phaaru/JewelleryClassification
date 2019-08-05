@@ -1,14 +1,14 @@
-package com.example.jewelryclassification.imagepicker
+package com.example.jewelleryclassification.imagepicker
 
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import com.example.jewelryclassification.FilePickUtils
-import com.example.jewelryclassification.database.JWDatabaseDao
-import com.example.jewelryclassification.database.JWImage
-import com.example.jewelryclassification.network.PredApi
+import com.example.jewelleryclassification.FilePickUtils
+import com.example.jewelleryclassification.database.JWDatabaseDao
+import com.example.jewelleryclassification.database.JWImage
+import com.example.jewelleryclassification.network.PredApi
 import kotlinx.coroutines.*
 import java.io.File
 import okhttp3.MediaType

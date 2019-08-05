@@ -3,6 +3,6 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/navigation" app:startDestination="@id/imageViewFragment">
 
-    <fragment android:id="@+id/imageViewFragment" android:name="com.example.jewelryclassification.imagepicker.ImagePickFragment"
+    <fragment android:id="@+id/imageViewFragment" android:name="com.example.jewelleryclassification.imagepicker.ImagePickFragment"
               android:label="ImageViewFragment"/>
 </navigation>

@@ -1,4 +1,4 @@
-package com.example.jewelryclassification.overview
+package com.example.jewelleryclassification.overview
 
 import androidx.fragment.app.Fragment
 

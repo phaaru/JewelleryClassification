@@ -1,4 +1,4 @@
-package com.example.jewelryclassification.database
+package com.example.jewelleryclassification.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

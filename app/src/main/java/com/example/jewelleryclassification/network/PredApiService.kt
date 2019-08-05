@@ -1,4 +1,4 @@
-package com.example.jewelryclassification.network
+package com.example.jewelleryclassification.network
 
 import com.google.gson.GsonBuilder
 import okhttp3.MultipartBody

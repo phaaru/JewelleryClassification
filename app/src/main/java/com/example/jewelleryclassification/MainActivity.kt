@@ -1,4 +1,4 @@
-package com.example.jewelryclassification
+package com.example.jewelleryclassification
 
 import android.Manifest
 import android.content.pm.PackageManager

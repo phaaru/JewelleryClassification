@@ -1,4 +1,4 @@
-package com.example.jewelryclassification
+package com.example.jewelleryclassification
 
 import org.junit.Test
 

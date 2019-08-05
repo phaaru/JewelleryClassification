@@ -1,9 +1,9 @@
-package com.example.jewelryclassification.imagepicker
+package com.example.jewelleryclassification.imagepicker
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.jewelryclassification.database.JWDatabaseDao
+import com.example.jewelleryclassification.database.JWDatabaseDao
 import java.lang.IllegalArgumentException
 
 class ImagePickViewModelFactory(
