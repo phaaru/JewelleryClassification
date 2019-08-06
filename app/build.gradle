@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs'
+apply plugin: 'kotlinx-serialization'
 
 android {
     compileSdkVersion 29
@@ -24,6 +25,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+}
+
+repositories {
+    // artifacts are published to JCenter
+    jcenter()
 }
 
 dependencies {
@@ -62,4 +68,7 @@ dependencies {
 
     //EasyPermissions
     implementation 'pub.devrel:easypermissions:3.0.0'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$version_kotlin"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.11.1"
 }

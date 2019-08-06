@@ -17,6 +17,12 @@ import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlinx.serialization.*
+import kotlinx.serialization.json.JSON
+
+
+@Serializable
+data class SimpleResponse(val index: String)
 
 class ImagePickViewModel(private val database: JWDatabaseDao, application: Application) : AndroidViewModel(application) {
     private var viewModelJob = Job()
@@ -46,8 +52,9 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
                         //do something with the image (save it to some directory or whatever you need to do with it here)
                         val uri = FilePickUtils.getSmartFilePath(getApplication(), imageUri)
                         Log.v("MyApp 2", uri!!)
-                        insert(JWImage(path = uri!!))
-                        getJWPrediction(uri!!)
+                        val image = JWImage(path = uri!!)
+                        insert(image)
+                        getJWPrediction(uri!!, image)
                     }
 
 //              In case only 1 image is selected in picker
@@ -55,16 +62,17 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
                     val imagePath = d2
                     val uri = FilePickUtils.getSmartFilePath(getApplication(), imagePath)
                     Log.v("MyApp", uri!!)
+                    val image =JWImage(path = uri!!)
                     //do something with the image (save it to some directory or whatever you need to do with it here)
-                    insert(JWImage(path = uri!!))
+                    insert(image)
                     // The Image is POSTed to the server and a response is expected, it is parsed in this function itself, the time difference between the start of this function and its end is how much time it takes to get a prediction
-                    getJWPrediction(uri!!)
+                    getJWPrediction(uri!!, image)
                 }
             }
         }
     }
 
-    private fun getJWPrediction(filePath: String) {
+    private fun getJWPrediction(filePath: String, image: JWImage) {
         coroutineScope.launch {
             val file = File(filePath)
             Log.v("upload", "Filename $file")
@@ -77,6 +85,8 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
                 }
 
                 override fun onResponse(call: Call<Any>, response: Response<Any>) {
+                    val obj = JSON.parse(SimpleResponse.serializer(), response.body().toString())
+                    image.type = obj.index
                     Log.d("OK", "Response " + response.raw().message())
                     Log.d("YO", "Response " + response.body())
                 }
