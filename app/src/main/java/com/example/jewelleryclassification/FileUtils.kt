@@ -10,10 +10,7 @@ import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 
-/**
- * A util class for File Picker
- * @author vinayagasundar
- */
+
 object FilePickUtils {
 
 

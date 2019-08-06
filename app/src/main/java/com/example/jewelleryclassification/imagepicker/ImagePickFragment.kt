@@ -19,7 +19,6 @@ class ImagePickFragment : Fragment()  {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val binding = FragmentImagePickBinding.inflate(inflater)
-
         val application = requireNotNull(this.activity).application
         val dataSource = JWDatabase.getInstance(application).jwDatabaseDao
         val viewModelFactory = ImagePickViewModelFactory(dataSource, application)
@@ -40,7 +39,6 @@ class ImagePickFragment : Fragment()  {
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1)
         }
-
         return binding.root
     }
 

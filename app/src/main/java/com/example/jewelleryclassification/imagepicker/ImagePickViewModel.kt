@@ -30,14 +30,12 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
     }
 
     // Returns ImageUri from ImagePicker Intent
-
     fun returnDataFromPicker(resultCode: Int, data: Intent?) {
         coroutineScope.launch {
             if (resultCode == Activity.RESULT_OK) {
                 Log.v("MyApp 1", resultCode.toString())
                 val d = data?.clipData
                 val d2 = data?.data
-
 //              In case more than 1 image is selected in picker
                 if (d != null) {
                     val count = d.itemCount //evaluate the count before the for loop --- otherwise, the count is evaluated every loop.
@@ -49,7 +47,6 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
                         insert(JWImage(path = uri!!))
                         getJWPrediction(uri!!)
                     }
-
 //              In case only 1 image is selected in picker
                 } else if (d2 != null) {
                     val imagePath = d2

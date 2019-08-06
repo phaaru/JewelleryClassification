@@ -48,6 +48,9 @@ interface JWDatabaseDao {
     @Query("SELECT * FROM image_table ORDER BY imageId DESC")
     fun getAllImages(): LiveData<List<JWImage>>
 
+    @Query("SELECT * from image_table WHERE type = :type ORDER BY imageId DESC")
+    fun getAllImagesOfType(type: String): LiveData<List<JWImage>>
+
     /**
      * Selects and returns the latest night.
      */
