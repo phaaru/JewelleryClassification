@@ -52,7 +52,6 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
                         Log.v("MyApp 2", uri!!)
                         val image = JWImage(path = uri!!)
                         insert(image)
-                        getJWPrediction(uri!!, image)
                     }
 //              In case only 1 image is selected in picker
                 } else if (d2 != null) {
@@ -63,15 +62,24 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
                     //do something with the image (save it to some directory or whatever you need to do with it here)
                     insert(image)
                     // The Image is POSTed to the server and a response is expected, it is parsed in this function itself, the time difference between the start of this function and its end is how much time it takes to get a prediction
-                    getJWPrediction(uri!!, image)
                 }
             }
         }
     }
 
-    private fun getJWPrediction(filePath: String, image: JWImage) {
+    fun startPredictions(){
+        val images = database.getAllImagesOfType("unclassified")
+        images.value?.size
+        if (images.value != null) {
+            for (image in images.value!!) {
+                getJWPrediction(image)
+            }
+        }
+    }
+
+    private fun getJWPrediction(image: JWImage) {
         coroutineScope.launch {
-            val file = File(filePath)
+            val file = File(image.path)
             Log.v("upload", "Filename $file")
             val mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
             val fileToUpload = MultipartBody.Part.createFormData("file", file.name, mFile)
@@ -84,6 +92,7 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
                 override fun onResponse(call: Call<Any>, response: Response<Any>) {
                     val obj = JSON.parse(SimpleResponse.serializer(), response.body().toString())
                     image.type = obj.index
+                    database.update(image)
                     Log.d("OK", "Response " + response.raw().message())
                     Log.d("YO", "Response " + response.body())
                 }

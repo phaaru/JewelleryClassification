@@ -16,14 +16,18 @@ class OverviewViewModel (private val database: JWDatabaseDao, application: Appli
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private val _navigateToSelectedProperty = MutableLiveData<JWImage>()
-    val navigateToSelectedProperty: LiveData<JWImage>
+    private val _navigateToSelectedProperty = MutableLiveData<String>()
+    val navigateToSelectedProperty: LiveData<String>
         get() = _navigateToSelectedProperty
 
     val jwimages = database.getAllImages()
 
-    fun displayProertyDetails(jwImage: JWImage) {
-        _navigateToSelectedProperty.value = jwImage
+    fun displayPropertyDetails(jwImage: JWImage) {
+        _navigateToSelectedProperty.value = jwImage.path
+    }
+
+    fun displayPropertyDetailsComplete() {
+        _navigateToSelectedProperty.value = null
     }
 
 }

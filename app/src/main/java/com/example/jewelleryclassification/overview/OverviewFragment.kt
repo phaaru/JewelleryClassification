@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.example.jewelleryclassification.database.JWDatabase
 import com.example.jewelleryclassification.databinding.FragmentOverviewBinding
 
@@ -24,7 +26,14 @@ class OverviewFragment : Fragment() {
         binding.overviewViewModel = overviewViewModel
 
         binding.photosGrid.adapter = PhotoGridAdapter(PhotoGridAdapter.OnClickListener {
-            overviewViewModel.displayProertyDetails(it)
+            overviewViewModel.displayPropertyDetails(it)
+        })
+
+        overviewViewModel.navigateToSelectedProperty.observe(this, Observer {
+            if (null != it) {
+                this.findNavController().navigate(OverviewFragmentDirections.actionOverviewFragmentToDetailFragment(it))
+                overviewViewModel.displayPropertyDetailsComplete()
+            }
         })
 
         return binding.root

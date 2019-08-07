@@ -17,4 +17,5 @@
             android:padding="2dp"
             app:imageUri="@{jwimage.path}"
             tools:src="@tools:sample/backgrounds/scenic"/>
+
 </layout>

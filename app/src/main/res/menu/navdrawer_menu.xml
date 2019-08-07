@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/images" android:id="@+id/overviewFragment"
+          android:icon="@drawable/ic_baseline_home_24px"/>
+    <item android:title="@string/select" android:id="@+id/imagePickFragment"
+          android:icon="@drawable/ic_baseline_camera_enhance_24px"/>
+</menu>

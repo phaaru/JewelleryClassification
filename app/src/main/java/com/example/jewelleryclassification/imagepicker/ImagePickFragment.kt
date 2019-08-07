@@ -39,6 +39,11 @@ class ImagePickFragment : Fragment()  {
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1)
         }
+
+        binding.predButton.setOnClickListener{
+            imagePickViewModel.startPredictions()
+        }
+
         return binding.root
     }
 
