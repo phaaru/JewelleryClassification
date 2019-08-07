@@ -18,7 +18,7 @@ interface JWDatabaseDao {
      *
      * @param night new value to write
      */
-    @Update(onConflict = OnConflictStrategy.IGNORE)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(jwImage: JWImage)
 
     /**
