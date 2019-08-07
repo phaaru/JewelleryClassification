@@ -19,21 +19,22 @@ private val gson = GsonBuilder()
     .setLenient()
     .create()
 
-//private val moshi = Moshi.Builder()
-//    .add(KotlinJsonAdapterFactory())
-//    .build()
+private val moshi = Moshi.Builder()
+    .add(KotlinJsonAdapterFactory())
+    .build()
 
 
 // Creating Retrofit object
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(GsonConverterFactory.create(gson))
+    .addConverterFactory(MoshiConverterFactory.create(moshi))
     .baseUrl(BASE_URL)
     .build()
 
 interface PredApiService {
     @Multipart
     @POST("predict")
-    suspend fun getPredictionAndUpload(@Part file: MultipartBody.Part) : Call<Any>
+    fun getPredictionAndUpload(@Part file: MultipartBody.Part) : Call<IndexResponse>
 }
 
 object PredApi {

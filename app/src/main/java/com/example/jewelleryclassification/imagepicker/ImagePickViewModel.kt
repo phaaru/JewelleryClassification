@@ -4,10 +4,12 @@ import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import android.util.Log
+import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import com.example.jewelleryclassification.FilePickUtils
 import com.example.jewelleryclassification.database.JWDatabaseDao
 import com.example.jewelleryclassification.database.JWImage
+import com.example.jewelleryclassification.network.IndexResponse
 import com.example.jewelleryclassification.network.PredApi
 import kotlinx.coroutines.*
 import java.io.File
@@ -35,11 +37,11 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
         }
     }
 
-    private suspend fun update(jwImage: JWImage) {
-        withContext(Dispatchers.IO) {
-            database.update(jwImage)
-        }
-    }
+//    private suspend fun update(jwImage: JWImage) {
+//        withContext(GlobalScope.coroutineContext) {
+//            database.update(jwImage)
+//        }
+//    }
 
     // Returns ImageUri from ImagePicker Intent
     fun returnDataFromPicker(resultCode: Int, data: Intent?) {
@@ -76,33 +78,40 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
     fun startPredictions(){
         GlobalScope.launch {
             val images = database.getAllImagesOfType("unclassified")
+//            update(getJWPrediction(images[2]))
             if (images.isNotEmpty()){
                 for (image in images) {
-                    getJWPrediction(image)
+                    image.type = getJWPrediction(image)
+                    database.update(image)
+                    delay(1500)
                 }
             }
         }
     }
 
-    private fun getJWPrediction(image: JWImage) {
+    private fun getJWPrediction(image: JWImage) : String {
         coroutineScope.launch {
             val file = File(image.path)
             Log.v("upload", "Filename $file")
             val mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
             val fileToUpload = MultipartBody.Part.createFormData("file", file.name, mFile)
             Log.v("mFile", mFile.toString())
-            PredApi.retrofitService.getPredictionAndUpload(fileToUpload).enqueue(object : Callback<Any> {
-                override fun onFailure(call: Call<Any>, t: Throwable) {
+            PredApi.retrofitService.getPredictionAndUpload(fileToUpload).enqueue(object : Callback<IndexResponse> {
+                override fun onFailure(call: Call<IndexResponse>, t: Throwable) {
                     Log.d("YO", "Error " + t.message)
                 }
 
-                override fun onResponse(call: Call<Any>, response: Response<Any>) {
-                    val obj = JSON.parse(SimpleResponse.serializer(), response.body().toString())
-                    image.type = obj.index
+                override fun onResponse(call: Call<IndexResponse>, response: Response<IndexResponse>) {
+//                    val obj = JSON.parse(SimpleResponse.serializer(), response.body().toString())
+//                    image.type = obj.index
+
+                    if (response.body() != null) {
+                        image.type = response.body()!!.index
+                    }
                     Log.d("OK", "Response " + response.raw().message())
-                    Log.d("YO", "Response " + response.body())
+                    Log.d("YO", "Response " + response.body()?.index + " " + image.imageId + " " + image.type)
                 }
-                })
+            })
 //            try {
 //                var indexResult = indexDeferred()
 //                Log.d("YO", "Response " + indexResult)
@@ -113,6 +122,7 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
 //                Log.d("YO", "Error " + t.message)
 //            }
         }
+        return image.type
     }
 
     override fun onCleared() {
