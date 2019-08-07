@@ -14,11 +14,11 @@ import java.io.File
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import okhttp3.MultipartBody
+import kotlinx.serialization.*
+import kotlinx.serialization.json.JSON
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlinx.serialization.*
-import kotlinx.serialization.json.JSON
 
 
 @Serializable
@@ -32,6 +32,12 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
     private suspend fun insert(jwImage: JWImage) {
         withContext(Dispatchers.IO) {
             database.insert(jwImage)
+        }
+    }
+
+    private suspend fun update(jwImage: JWImage) {
+        withContext(Dispatchers.IO) {
+            database.update(jwImage)
         }
     }
 
@@ -68,11 +74,12 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
     }
 
     fun startPredictions(){
-        val images = database.getAllImagesOfType("unclassified")
-        images.value?.size
-        if (images.value != null) {
-            for (image in images.value!!) {
-                getJWPrediction(image)
+        GlobalScope.launch {
+            val images = database.getAllImagesOfType("unclassified")
+            if (images.isNotEmpty()){
+                for (image in images) {
+                    getJWPrediction(image)
+                }
             }
         }
     }
@@ -92,11 +99,24 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
                 override fun onResponse(call: Call<Any>, response: Response<Any>) {
                     val obj = JSON.parse(SimpleResponse.serializer(), response.body().toString())
                     image.type = obj.index
-                    database.update(image)
                     Log.d("OK", "Response " + response.raw().message())
                     Log.d("YO", "Response " + response.body())
                 }
-            })
+                })
+//            try {
+//                var indexResult = indexDeferred()
+//                Log.d("YO", "Response " + indexResult)
+//                val obj = JSON.parse(SimpleResponse.serializer(), indexResult.toString())
+//                image.type = obj.index
+//                update(image)
+//            } catch (t:Throwable) {
+//                Log.d("YO", "Error " + t.message)
+//            }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
     }
 }
