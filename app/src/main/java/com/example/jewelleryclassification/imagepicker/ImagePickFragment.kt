@@ -23,6 +23,7 @@ class ImagePickFragment : Fragment()  {
         val dataSource = JWDatabase.getInstance(application).jwDatabaseDao
         val viewModelFactory = ImagePickViewModelFactory(dataSource, application)
 
+
         imagePickViewModel = ViewModelProviders.of(this, viewModelFactory).get(ImagePickViewModel::class.java)
 
         binding.imagePickViewModel = imagePickViewModel
@@ -41,7 +42,7 @@ class ImagePickFragment : Fragment()  {
         }
 
         binding.predButton.setOnClickListener{
-            imagePickViewModel.startPredictions()
+            imagePickViewModel.startPredictions(context!!)
         }
 
         return binding.root

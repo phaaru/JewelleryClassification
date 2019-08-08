@@ -4,8 +4,17 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/navigation"
-        app:startDestination="@id/overviewFragment">
+        app:startDestination="@id/typesFragment">
 
+    <fragment
+            android:id="@+id/typesFragment"
+            android:name="com.example.jewelleryclassification.types.TypesFragment"
+            android:label="TypesFragment"
+            tools:layout="@layout/fragment_types">
+        <action
+                android:id="@+id/action_typesFragment_to_overviewFragment"
+                app:destination="@id/overviewFragment"/>
+    </fragment>
     <fragment
             android:id="@+id/overviewFragment"
             android:name="com.example.jewelleryclassification.overview.OverviewFragment"
@@ -14,17 +23,22 @@
         <action
                 android:id="@+id/action_overviewFragment_to_detailFragment"
                 app:destination="@id/detailFragment"/>
+        <argument
+                android:name="selectedType"
+                app:argType="string"/>
     </fragment>
     <fragment
             android:id="@+id/detailFragment"
             android:name="com.example.jewelleryclassification.detail.DetailFragment"
             android:label="DetailFragment"
             tools:layout="@layout/fragment_detail">
-    <argument
+        <argument
             android:name="selectedImagePath"
             app:argType="string"/>
     </fragment>
     <fragment android:id="@+id/imagePickFragment"
               android:name="com.example.jewelleryclassification.imagepicker.ImagePickFragment"
-              android:label="ImagePickFragment"/>
+              android:label="ImagePickFragment"
+              tools:layout="@layout/fragment_image_pick"/>
+
 </navigation>

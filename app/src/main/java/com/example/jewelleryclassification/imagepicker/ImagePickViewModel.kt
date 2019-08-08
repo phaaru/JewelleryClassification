@@ -2,10 +2,12 @@ package com.example.jewelleryclassification.imagepicker
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
+import com.example.jewelleryclassification.CompressImage
 import com.example.jewelleryclassification.FilePickUtils
 import com.example.jewelleryclassification.database.JWDatabaseDao
 import com.example.jewelleryclassification.database.JWImage
@@ -37,6 +39,7 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
         }
     }
 
+
 //    private suspend fun update(jwImage: JWImage) {
 //        withContext(GlobalScope.coroutineContext) {
 //            database.update(jwImage)
@@ -65,6 +68,7 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
                 } else if (d2 != null) {
                     val imagePath = d2
                     val uri = FilePickUtils.getSmartFilePath(getApplication(), imagePath)
+
                     Log.v("MyApp", uri!!)
                     val image =JWImage(path = uri!!)
                     //do something with the image (save it to some directory or whatever you need to do with it here)
@@ -75,15 +79,16 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
         }
     }
 
-    fun startPredictions(){
+    fun startPredictions(context: Context){
         GlobalScope.launch {
-            val images = database.getAllImagesOfType("unclassified")
+            val images = database.getListOfType("unclassified")
 //            update(getJWPrediction(images[2]))
             if (images.isNotEmpty()){
                 for (image in images) {
+                    image.path = CompressImage.compressImage(image.path, context)
                     image.type = getJWPrediction(image)
-                    database.update(image)
-                    delay(1500)
+//                    database.insert(image)
+                    delay(2000)
                 }
             }
         }
@@ -107,6 +112,7 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
 
                     if (response.body() != null) {
                         image.type = response.body()!!.index
+                        database.insert(image)
                     }
                     Log.d("OK", "Response " + response.raw().message())
                     Log.d("YO", "Response " + response.body()?.index + " " + image.imageId + " " + image.type)

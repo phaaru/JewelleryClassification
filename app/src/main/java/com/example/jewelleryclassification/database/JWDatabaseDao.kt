@@ -9,7 +9,7 @@ import androidx.room.*
 @Dao
 interface JWDatabaseDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(jwImage: JWImage)
 
     /**
@@ -45,8 +45,16 @@ interface JWDatabaseDao {
     @Query("SELECT * FROM image_table ORDER BY imageId DESC")
     fun getAllImages(): LiveData<List<JWImage>>
 
-    @Query("SELECT * from image_table WHERE type = :type ORDER BY imageId DESC")
-    fun getAllImagesOfType(type: String): List<JWImage>
+    @Query("SELECT * FROM image_table WHERE type = :type ORDER BY imageId DESC")
+    fun getListOfType(type: String): List<JWImage>
+
+
+    @Query("SELECT * FROM image_table WHERE type = :type ORDER BY imageId DESC")
+    fun getAllImagesOfType(type: String): LiveData<List<JWImage>>
+
+    @Query("SELECT * FROM image_table GROUP BY type")
+    fun getAllTypes(): LiveData<List<JWImage>>
+
 
     /**
      * Selects and returns the latest night.

@@ -8,14 +8,26 @@
                 type="com.example.jewelleryclassification.database.JWImage" />
     </data>
 
-    <ImageView
-            android:id="@+id/jw_image"
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="170dp"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            android:padding="2dp"
-            app:imageUri="@{jwimage.path}"
-            tools:src="@tools:sample/backgrounds/scenic"/>
+            android:layout_height="wrap_content">
+
+
+        <ImageView
+                android:id="@+id/jw_image"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:padding="2dp"
+                app:imageUri="@{jwimage.path}"
+                tools:src="@tools:sample/backgrounds/scenic"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </layout>

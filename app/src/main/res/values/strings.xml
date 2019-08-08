@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">JewelryClassification</string>
+    <string name="app_name">JewelleryClassification</string>
     <string name="select">Select Images</string>
     <string name="images">View Images</string>
 </resources>

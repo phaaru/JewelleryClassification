@@ -10,17 +10,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
-class OverviewViewModel (private val database: JWDatabaseDao, application: Application) : AndroidViewModel(application) {
+class OverviewViewModel (private val database: JWDatabaseDao, application: Application, type: String) : AndroidViewModel(application) {
 
     // viewModelJob allows us to cancel all coroutines started by this ViewModel.
-    private var viewModelJob = Job()
-    private val coroutineScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+//    private var viewModelJob = Job()
+//    private val coroutineScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     private val _navigateToSelectedProperty = MutableLiveData<String>()
     val navigateToSelectedProperty: LiveData<String>
         get() = _navigateToSelectedProperty
 
-    val jwimages = database.getAllImages()
+    val jwimages = database.getAllImagesOfType(type)
 
     fun displayPropertyDetails(jwImage: JWImage) {
         _navigateToSelectedProperty.value = jwImage.path

@@ -18,7 +18,10 @@ class OverviewFragment : Fragment() {
         binding.setLifecycleOwner(this)
         val application = requireNotNull(this.activity).application
         val dataSource = JWDatabase.getInstance(application).jwDatabaseDao
-        val viewModelFactory = OverviewViewModelFactory(dataSource, application)
+
+        val type = OverviewFragmentArgs.fromBundle(arguments!!).selectedType
+
+        val viewModelFactory = OverviewViewModelFactory(dataSource, application, type)
 
         val overviewViewModel = ViewModelProviders.of(
             this, viewModelFactory).get(OverviewViewModel::class.java)
