@@ -12,7 +12,9 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 
-private const val BASE_URL = "http://ec2-3-14-11-91.us-east-2.compute.amazonaws.com:80/"
+private const val BASE_URL = "http://10.0.2.2:5000/"
+//private const val BASE_URL = "http://ec2-3-14-11-91.us-east-2.compute.amazonaws.com:80/"
+
 
 // The Gson Builder
 private val gson = GsonBuilder()

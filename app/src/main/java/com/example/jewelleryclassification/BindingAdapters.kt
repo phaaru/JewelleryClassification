@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.jewelleryclassification.database.JWImage
 import com.example.jewelleryclassification.overview.PhotoGridAdapter
 import com.example.jewelleryclassification.types.TypesGridAdapter
+import uk.co.senab.photoview.PhotoView
 
 @BindingAdapter("listData")
 fun bindRecyclerView(recyclerView: RecyclerView, data : List<JWImage>?) {
@@ -30,6 +31,14 @@ fun bindImage(imgView: ImageView, imgUri: String?) {
 //            .load(uri)
 //            .into(imgView)
         imgView.setImageURI(uri)
+    }
+}
+
+@BindingAdapter("photoViewImageUri")
+fun bindPhotoView(photoView : PhotoView, imgUri: String?) {
+    imgUri?.let {
+        val uri = it.toUri()
+        photoView.setImageURI(uri)
     }
 }
 

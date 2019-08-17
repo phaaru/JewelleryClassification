@@ -11,17 +11,29 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-        <ImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+        <uk.co.senab.photoview.PhotoView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 tools:srcCompat="@tools:sample/backgrounds/scenic"
                 android:id="@+id/photo_large"
                 android:scaleType="centerCrop"
-                app:imageUri="@{viewModel.selectedImagePath}"
+                app:photoViewImageUri="@{viewModel.selectedImagePath}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/share_fab"
+                android:layout_gravity="end|bottom"
+                android:layout_marginBottom="40dp"
+                app:layout_constraintBottom_toBottomOf="@+id/photo_large"
+                app:layout_constraintEnd_toEndOf="@+id/photo_large"
+                android:layout_marginEnd="40dp"
+                android:src="@drawable/ic_baseline_share_24px"
+                android:contentDescription="@string/share"
+                android:layout_margin="8dp"
+        />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
