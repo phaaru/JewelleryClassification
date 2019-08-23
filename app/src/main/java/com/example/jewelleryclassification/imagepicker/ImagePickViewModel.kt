@@ -5,13 +5,11 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import com.example.jewelleryclassification.CompressImage
 import com.example.jewelleryclassification.FilePickUtils
 import com.example.jewelleryclassification.database.JWDatabaseDao
 import com.example.jewelleryclassification.database.JWImage
-import com.example.jewelleryclassification.network.IndexResponse
 import com.example.jewelleryclassification.network.PredApi
 import kotlinx.coroutines.*
 import java.io.File
@@ -20,9 +18,7 @@ import okhttp3.RequestBody
 import okhttp3.MultipartBody
 import kotlinx.serialization.*
 import kotlinx.serialization.json.JSON
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import retrofit2.HttpException
 
 
 @Serializable
@@ -39,13 +35,6 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
         }
     }
 
-
-//    private suspend fun update(jwImage: JWImage) {
-//        withContext(GlobalScope.coroutineContext) {
-//            database.update(jwImage)
-//        }
-//    }
-
     // Returns ImageUri from ImagePicker Intent
     fun returnDataFromPicker(resultCode: Int, data: Intent?) {
         coroutineScope.launch {
@@ -61,7 +50,7 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
                         //do something with the image (save it to some directory or whatever you need to do with it here)
                         val uri = FilePickUtils.getSmartFilePath(getApplication(), imageUri)
                         Log.v("MyApp 2", uri!!)
-                        val image = JWImage(path = uri!!)
+                        val image = JWImage(path = uri)
                         insert(image)
                     }
 //              In case only 1 image is selected in picker
@@ -101,32 +90,32 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
             val mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
             val fileToUpload = MultipartBody.Part.createFormData("file", file.name, mFile)
             Log.v("mFile", mFile.toString())
-            PredApi.retrofitService.getPredictionAndUpload(fileToUpload).enqueue(object : Callback<IndexResponse> {
-                override fun onFailure(call: Call<IndexResponse>, t: Throwable) {
-                    Log.d("YO", "Error " + t.message)
-                }
+            val service = PredApi.makePredApiService()
+            CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val response = service.getPredictionAndUpload(fileToUpload)
+                        if (response.isSuccessful) {
+                            //Do something with response e.g show to the UI.
+                            val obj = JSON.parse(SimpleResponse.serializer(), response.body().toString())
+                            image.type = obj.index
+                            if (response.body() != null) {
+                                image.type = response.body()!!.index
+                                insert(image)
+                            }
+                            Log.d("OK", "Response " + response.raw().message())
+                            Log.d("YO", "Response " + response.body()?.index + " " + image.imageId + " " + image.type)
 
-                override fun onResponse(call: Call<IndexResponse>, response: Response<IndexResponse>) {
-//                    val obj = JSON.parse(SimpleResponse.serializer(), response.body().toString())
-//                    image.type = obj.index
-
-                    if (response.body() != null) {
-                        image.type = response.body()!!.index
-                        database.insert(image)
+                        } else {
+                            Log.d("ERROR","Error: ${response.code()}")
+                        }
+                    } catch (e: HttpException) {
+                        Log.d("ERROR","Exception ${e.message}")
+                    } catch (e: Throwable) {
+                        Log.d("ERROR", "Ooops: Something else went wrong")
+                    } finally {
+                        this.cancel()
                     }
-                    Log.d("OK", "Response " + response.raw().message())
-                    Log.d("YO", "Response " + response.body()?.index + " " + image.imageId + " " + image.type)
-                }
-            })
-//            try {
-//                var indexResult = indexDeferred()
-//                Log.d("YO", "Response " + indexResult)
-//                val obj = JSON.parse(SimpleResponse.serializer(), indexResult.toString())
-//                image.type = obj.index
-//                update(image)
-//            } catch (t:Throwable) {
-//                Log.d("YO", "Error " + t.message)
-//            }
+            }
         }
         return image.type
     }
