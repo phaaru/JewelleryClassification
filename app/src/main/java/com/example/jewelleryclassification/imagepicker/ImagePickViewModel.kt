@@ -96,9 +96,9 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
                         val response = service.getPredictionAndUpload(fileToUpload)
                         if (response.isSuccessful) {
                             //Do something with response e.g show to the UI.
-                            val obj = JSON.parse(SimpleResponse.serializer(), response.body().toString())
-                            image.type = obj.index
+                            val obj = response.body()
                             if (response.body() != null) {
+                                image.type = obj!!.index
                                 image.type = response.body()!!.index
                                 insert(image)
                             }
@@ -111,7 +111,7 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
                     } catch (e: HttpException) {
                         Log.d("ERROR","Exception ${e.message}")
                     } catch (e: Throwable) {
-                        Log.d("ERROR", "Ooops: Something else went wrong")
+                        Log.d("ERROR", "${e.message} Ooops: Something else went wrong")
                     } finally {
                         this.cancel()
                     }
