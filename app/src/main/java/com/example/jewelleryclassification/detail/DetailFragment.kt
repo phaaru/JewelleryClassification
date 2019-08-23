@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.view.View.*
+import androidx.core.net.toUri
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -34,8 +35,8 @@ class DetailFragment : Fragment() {
 
         binding.shareFab.setOnClickListener {
             val intent = Intent(Intent.ACTION_SEND)
-            intent.putExtra(Intent.EXTRA_STREAM, imagePath)
-            intent.type = "image/jpeg"
+            intent.putExtra(Intent.EXTRA_STREAM, imagePath.toUri())
+            intent.type = "image/*"
             startActivity(Intent.createChooser(intent, "Share Image"))
         }
         binding.viewModel = ViewModelProviders.of(

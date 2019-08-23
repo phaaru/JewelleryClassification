@@ -12,6 +12,9 @@ data class JWImage(
     @ColumnInfo(name = "uri")
     var path: String = "",
 
+    @ColumnInfo(name = "j_uri")
+    var jPath: String = "",
+
     @ColumnInfo(name = "type")
     var type: String = "unclassified"
 )

@@ -46,12 +46,18 @@ fun bindPhotoView(photoView : PhotoView, imgUri: String?) {
 fun bindTextView(textView: TextView, type: String) {
     type?.let {
         when (type) {
-            "0" -> textView.text = "DKP"
-            "1" -> textView.text = "Jhumki"
-            "2" -> textView.text = "Ladies Ring"
-            "3" -> textView.text = "M Chain"
-            "4" -> textView.text = "SKP"
-            "5" -> textView.text = "Set"
+            "0" -> textView.text = "Bangles"
+            "1" -> textView.text = "DKP"
+            "2" -> textView.text = "Fox Kanthi"
+            "3" -> textView.text = "Jhumki"
+            "4" -> textView.text = "Ladies Ring"
+            "5" -> textView.text = "Mangal Sutra"
+            "6" -> textView.text = "Nath"
+            "7" -> textView.text = "SKP"
+            "8" -> textView.text = "Set"
+            "9" -> textView.text = "Thrissur Kerela"
+            "10" -> textView.text = "Tika"
+            "11" -> textView.text = "Toda"
             else -> textView.text = "Not yet Classified"
         }
     }

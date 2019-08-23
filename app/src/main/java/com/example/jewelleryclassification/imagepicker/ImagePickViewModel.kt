@@ -17,7 +17,6 @@ import okhttp3.MediaType
 import okhttp3.RequestBody
 import okhttp3.MultipartBody
 import kotlinx.serialization.*
-import kotlinx.serialization.json.JSON
 import retrofit2.HttpException
 
 
@@ -74,7 +73,7 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
 //            update(getJWPrediction(images[2]))
             if (images.isNotEmpty()){
                 for (image in images) {
-                    image.path = CompressImage.compressImage(image.path, context)
+                    image.jPath = CompressImage.compressImage(image.path, context)
                     image.type = getJWPrediction(image)
 //                    database.insert(image)
                     delay(2000)
@@ -85,36 +84,36 @@ class ImagePickViewModel(private val database: JWDatabaseDao, application: Appli
 
     private fun getJWPrediction(image: JWImage) : String {
         coroutineScope.launch {
-            val file = File(image.path)
+            val file = File(image.jPath)
             Log.v("upload", "Filename $file")
             val mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
             val fileToUpload = MultipartBody.Part.createFormData("file", file.name, mFile)
             Log.v("mFile", mFile.toString())
             val service = PredApi.makePredApiService()
             CoroutineScope(Dispatchers.IO).launch {
-                    try {
-                        val response = service.getPredictionAndUpload(fileToUpload)
-                        if (response.isSuccessful) {
-                            //Do something with response e.g show to the UI.
-                            val obj = JSON.parse(SimpleResponse.serializer(), response.body().toString())
-                            image.type = obj.index
-                            if (response.body() != null) {
-                                image.type = response.body()!!.index
-                                insert(image)
-                            }
-                            Log.d("OK", "Response " + response.raw().message())
-                            Log.d("YO", "Response " + response.body()?.index + " " + image.imageId + " " + image.type)
-
-                        } else {
-                            Log.d("ERROR","Error: ${response.code()}")
+                try {
+                    val response = service.getPredictionAndUpload(fileToUpload)
+                    if (response.isSuccessful) {
+                        //Do something with response e.g show to the UI.
+                        val obj = response.body()
+                        if (response.body() != null) {
+                            image.type = obj!!.index
+                            image.type = response.body()!!.index
+                            insert(image)
                         }
-                    } catch (e: HttpException) {
-                        Log.d("ERROR","Exception ${e.message}")
-                    } catch (e: Throwable) {
-                        Log.d("ERROR", "Ooops: Something else went wrong")
-                    } finally {
-                        this.cancel()
+                        Log.d("OK", "Response " + response.raw().message())
+                        Log.d("YO", "Response " + response.body()?.index + " " + image.imageId + " " + image.type)
+
+                    } else {
+                        Log.d("ERROR","Error: ${response.code()}")
                     }
+                } catch (e: HttpException) {
+                    Log.d("ERROR","Exception ${e.message}")
+                } catch (e: Throwable) {
+                    Log.d("ERROR", "${e.message} Ooops: Something else went wrong")
+                } finally {
+                    this.cancel()
+                }
             }
         }
         return image.type
