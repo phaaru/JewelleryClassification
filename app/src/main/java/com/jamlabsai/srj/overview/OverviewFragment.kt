@@ -1,15 +1,16 @@
-package com.example.jewelleryclassification.overview
+package com.jamlabsai.srj.overview
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.example.jewelleryclassification.database.JWDatabase
-import com.example.jewelleryclassification.databinding.FragmentOverviewBinding
+import com.jamlabsai.srj.database.JWDatabase
+import com.jamlabsai.srj.databinding.FragmentOverviewBinding
 
 class OverviewFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -20,6 +21,23 @@ class OverviewFragment : Fragment() {
         val dataSource = JWDatabase.getInstance(application).jwDatabaseDao
 
         val type = OverviewFragmentArgs.fromBundle(arguments!!).selectedType
+
+        when (type) {
+            "0" -> (activity as AppCompatActivity).supportActionBar?.title = "Bangles"
+            "1" -> (activity as AppCompatActivity).supportActionBar?.title = "DKP"
+            "2" -> (activity as AppCompatActivity).supportActionBar?.title = "Fox Kanthi"
+            "3" -> (activity as AppCompatActivity).supportActionBar?.title = "Jhumki"
+            "4" -> (activity as AppCompatActivity).supportActionBar?.title = "Ladies Ring"
+            "5" -> (activity as AppCompatActivity).supportActionBar?.title = "Mangal Sutra"
+            "6" -> (activity as AppCompatActivity).supportActionBar?.title = "Nath"
+            "7" -> (activity as AppCompatActivity).supportActionBar?.title = "SKP"
+            "8" -> (activity as AppCompatActivity).supportActionBar?.title = "Set"
+            "9" -> (activity as AppCompatActivity).supportActionBar?.title = "Thrissur Kerela"
+            "10" -> (activity as AppCompatActivity).supportActionBar?.title = "Tika"
+            "11" -> (activity as AppCompatActivity).supportActionBar?.title = "Toda"
+            else -> (activity as AppCompatActivity).supportActionBar?.title = "Not yet Classified"
+        }
+
 
         val viewModelFactory = OverviewViewModelFactory(dataSource, application, type)
 
