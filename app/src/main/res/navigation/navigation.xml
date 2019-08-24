@@ -8,7 +8,7 @@
 
     <fragment
             android:id="@+id/typesFragment"
-            android:name="com.example.jewelleryclassification.types.TypesFragment"
+            android:name="com.jamlabsai.srj.types.TypesFragment"
             android:label="TypesFragment"
             tools:layout="@layout/fragment_types">
         <action
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
             android:id="@+id/overviewFragment"
-            android:name="com.example.jewelleryclassification.overview.OverviewFragment"
+            android:name="com.jamlabsai.srj.overview.OverviewFragment"
             android:label="OverviewFragment"
             tools:layout="@layout/fragment_overview">
         <action
@@ -29,7 +29,7 @@
     </fragment>
     <fragment
             android:id="@+id/detailFragment"
-            android:name="com.example.jewelleryclassification.detail.DetailFragment"
+            android:name="com.jamlabsai.srj.detail.DetailFragment"
             android:label="DetailFragment"
             tools:layout="@layout/fragment_detail">
         <argument
@@ -37,7 +37,7 @@
             app:argType="string"/>
     </fragment>
     <fragment android:id="@+id/imagePickFragment"
-              android:name="com.example.jewelleryclassification.imagepicker.ImagePickFragment"
+              android:name="com.jamlabsai.srj.imagepicker.ImagePickFragment"
               android:label="ImagePickFragment"
               tools:layout="@layout/fragment_image_pick"/>
 

@@ -4,7 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable name="typesViewModel"
-                  type="com.example.jewelleryclassification.types.TypesViewModel"/>
+                  type="com.jamlabsai.srj.types.TypesViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

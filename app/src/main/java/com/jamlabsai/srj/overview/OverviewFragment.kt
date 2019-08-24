@@ -12,6 +12,8 @@ import androidx.navigation.fragment.findNavController
 import com.jamlabsai.srj.database.JWDatabase
 import com.jamlabsai.srj.databinding.FragmentOverviewBinding
 
+private lateinit var barType : String
+
 class OverviewFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -23,21 +25,21 @@ class OverviewFragment : Fragment() {
         val type = OverviewFragmentArgs.fromBundle(arguments!!).selectedType
 
         when (type) {
-            "0" -> (activity as AppCompatActivity).supportActionBar?.title = "Bangles"
-            "1" -> (activity as AppCompatActivity).supportActionBar?.title = "DKP"
-            "2" -> (activity as AppCompatActivity).supportActionBar?.title = "Fox Kanthi"
-            "3" -> (activity as AppCompatActivity).supportActionBar?.title = "Jhumki"
-            "4" -> (activity as AppCompatActivity).supportActionBar?.title = "Ladies Ring"
-            "5" -> (activity as AppCompatActivity).supportActionBar?.title = "Mangal Sutra"
-            "6" -> (activity as AppCompatActivity).supportActionBar?.title = "Nath"
-            "7" -> (activity as AppCompatActivity).supportActionBar?.title = "SKP"
-            "8" -> (activity as AppCompatActivity).supportActionBar?.title = "Set"
-            "9" -> (activity as AppCompatActivity).supportActionBar?.title = "Thrissur Kerela"
-            "10" -> (activity as AppCompatActivity).supportActionBar?.title = "Tika"
-            "11" -> (activity as AppCompatActivity).supportActionBar?.title = "Toda"
-            else -> (activity as AppCompatActivity).supportActionBar?.title = "Not yet Classified"
+            "0" -> barType = "Bangles"
+            "1" -> barType = "DKP"
+            "2" -> barType = "Fox Kanthi"
+            "3" -> barType = "Jhumki"
+            "4" -> barType = "Ladies Ring"
+            "5" -> barType = "Mangal Sutra"
+            "6" -> barType = "Nath"
+            "7" -> barType = "SKP"
+            "8" -> barType = "Set"
+            "9" -> barType = "Thrissur Kerela"
+            "10" -> barType = "Tika"
+            "11" -> barType = "Toda"
+            else -> barType= "Not yet Classified"
         }
-
+        (activity as AppCompatActivity).supportActionBar?.title = barType
 
         val viewModelFactory = OverviewViewModelFactory(dataSource, application, type)
 
@@ -58,5 +60,10 @@ class OverviewFragment : Fragment() {
         })
 
         return binding.root
+    }
+
+    override fun onResume() {
+        (activity as AppCompatActivity).supportActionBar?.title = barType
+        super.onResume()
     }
 }
